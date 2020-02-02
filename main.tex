@@ -1,0 +1,394 @@
+\documentclass[10pt,twoside,b5paper,final]{book}
+
+\usepackage[utf8]{inputenc}
+
+\usepackage[b5paper]{geometry}
+\geometry{top=1in,bottom=0.875in,outer=0.75in,inner=1in}
+
+\usepackage{afterpage} % The \afterpage command causes LaTeX to
+                       % expand its argument after the current page
+                       % is filled and output. Although you can
+                       % specify any command in the \afterpage
+                       % argument, using the \clearpage command is a
+                       % particularly useful way to force the
+                       % printing of any floating objects (graphics
+                       % and long tables) that haven't yet been
+                       % anchored to a position. LaTeX fills the page
+                       % on which the \afterpage command occurs and
+                       % then prints any unanchored floating objects
+                       % before continuing with the text. Use the
+                       % \afterpage command in an encapsulated TeX
+                       % field. The package has no options.
+
+\usepackage{amsmath}   % If you are going beyond the most basic level
+                       % of displayed equations, you will benefit from
+                       % using the amsmath package that plugs into
+                       % LaTeX. This package has lots of useful
+                       % features for multi-line equations, compound
+                       % symbols, even commutative diagrams! Allows
+                       % use \text in equations	
+
+\usepackage{textcomp} % This package allows you to use the
+                      % comprehensive symbol list with over 3000 symbols
+                      % You need this to generate the promille sign 
+                      % (\textperthousand)
+
+\usepackage{booktabs}  % booktabs is to enable the easy production of
+                       % tables such as should appear in published
+                       % scientific books and journals. What
+                       % distinguishes these from plain LaTeX tables
+                       % is the default use of additional space above
+                       % and below rules, and rules of
+                       % varying`thickness'.booktabs is to enable the
+                       % easy production of tables such as should
+                       % appear in published scientific books and
+                       % journals. What distinguishes these from plain
+                       % LaTeX tables is the default use of additional
+                       % space above and below rules, and rules of
+                       % varying `thickness'.To have better tables
+\usepackage{multirow}
+
+\usepackage{longtable} % To create tables that span multiple pages
+
+\usepackage{enumerate} % The enumerate environment produces a
+                       % numbered list. Enumerations can be nested
+                       % within one another, up to four levels
+                       % deep. They can also be nested within other
+                       % paragraph-making environments.
+
+\usepackage{rotating}  % The rotating package implements three
+                       % environments within which in-line figures,
+                       % tables, and captions can be rotated by an
+                       % arbitrary number of degrees. Two additional
+                       % environments allow rotation of floating
+                       % objects, which are typeset alone on separate
+                       % pages.
+
+\usepackage[binary,thickspace,thickqspace]{SIunits}   % Typeset physical units following the rules
+                       % of the International System of Units (SI).
+
+\usepackage{ragged2e}
+
+\usepackage{float}
+
+\usepackage{textgreek}
+
+\usepackage{tgbonum}
+\usepackage[T1]{fontenc}
+
+\usepackage{graphicx}  % The graphicx package implements LaTeX
+                       % support for including graphics files,
+                       % rotating parts of a page, and scaling parts
+                       % of a page. The package depends on having a
+                       % DVI driver that can produce these effects.
+                       
+\usepackage{hyperref}  % For crossreferences in text 
+
+% paragraph skip                       
+% \setlength{\parskip}{0.2em}
+\renewcommand{\baselinestretch}{1.33}
+
+% package of reference
+\usepackage[backend=biber,style=nature,natbib=true]{biblatex}
+\addbibresource{library/bibliography.bib}
+\renewcommand*{\bibfont}{\fontfamily{phv}\selectfont\small}
+
+% ------------------------------- thumb index ------------------------
+%%% Thumb indices consist of white text on a rectangular colored background. The
+%%% font-size is 75% of the size of thumb height.
+\newlength\thumbheight
+\setlength\thumbheight{24pt}
+\newlength\thumbedge
+\setlength\thumbedge{2pt}
+\newlength\thumbhspace
+\setlength\thumbhspace{36pt}
+\newlength\thumbvspace
+\setlength\thumbvspace{3\thumbheight}
+
+\newlength\thumbwidth
+\setlength\thumbwidth{36pt}
+\newlength\thumbspacing
+\setlength\thumbspacing{2\thumbheight}
+
+%% We need the TikZ library calc to calculate the coordinates of the thumb
+%% indices.
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usepackage{xcolor}
+
+\definecolor{anthracite}{cmyk}{0,0,0,0.8}
+\colorlet{thumb}{anthracite}
+
+%% The lthumb command prints the current chapter number in a thumb index on the
+%% left (even) page.
+\newcommand*\lthumb{%
+    % \ifthumb%
+        \begin{tikzpicture}[remember picture,overlay]
+            \coordinate (top margin) at (0pt,1.5in+\topmargin+\headheight+\headsep);
+            \coordinate (left margin) at (1.1in+\evensidemargin,0pt);
+            %% Calculate the corners of the thumb index based on the current
+            %% chapter number.
+            \coordinate (top left) at ($(current page.north west)-(top margin)-(0pt,\value{chapter}\thumbvspace-\thumbvspace)$);
+            \coordinate (bottom right) at ($(top left)+(left margin)-(\thumbhspace,\thumbheight)$);
+            %% Shift the left edge to prevent the rounded corner from showing.
+            \coordinate (top left) at ($(top left)-(\thumbedge,0pt)$);
+            %% Draw the thumb index.
+            \fill[fill=thumb,rounded corners=\thumbedge](top left) rectangle (bottom right);
+            %% Print the chapter number at the center right in the thumb index.
+            \coordinate (center right) at ($(bottom right)+(0pt,0.5\thumbheight)$);
+            \node at (center right)[anchor=east,inner sep=2\thumbedge]{
+                \fontfamily{phv}\color{white}
+                \fontsize{0.7\thumbheight}{0.7\thumbheight}\selectfont
+                \thechapter
+            };
+        \end{tikzpicture}%
+    % \fi%
+}
+
+%% rthumb draws a thumb index on the right (odd) page.
+\newcommand*\rthumb{%
+    \begin{tikzpicture}[remember picture,overlay]
+        \coordinate (top margin) at (0pt,1in+\topmargin+\headheight+\headsep);
+        \coordinate (right margin) at (1.1in+\evensidemargin,0pt);
+        %% Calculate the corners of the thumb index based on the current
+        %% chapter number.
+        \coordinate (top right) at ($(current page.north east)-(top margin)-(0pt,\value{chapter}\thumbvspace-\thumbvspace)$);
+        \coordinate (bottom left) at ($(top right)-(right margin)-(-\thumbhspace,\thumbheight)$);
+        %% Shift the left right to prevent the rounded corner from showing.
+        \coordinate (top right) at ($(top right)+(\thumbedge,0pt)$);
+        %% Draw the thumb index.
+        \fill[fill=thumb,rounded corners=\thumbedge](top right) rectangle (bottom left);
+        %% Print the chapter number at the center right in the thumb index.
+        \coordinate (center left) at ($(bottom left)+(0pt,0.5\thumbheight)$);
+        \node at (center left)[anchor=west,inner sep=2\thumbedge]{
+            \fontfamily{phv}\color{white}
+            \fontsize{0.7\thumbheight}{0.7\thumbheight}\selectfont
+            \thechapter
+        };
+    \end{tikzpicture}%
+}
+% ---------------------------------------------------------------------
+
+% define Page style
+\usepackage{fancyhdr}
+% Defining the new page style
+\pagestyle{fancy}
+\fancypagestyle{MyStyle}{%
+    \fancyhead{} %Clean headers
+    \fancyhead[RO]{\rthumb\fontfamily{phv}\selectfont\small\leftmark}
+    \fancyhead[LE]{\lthumb\fontfamily{phv}\selectfont\small\chaptername\ \thechapter}
+    \fancyfoot{} % clear all footer fields
+    \fancyfoot[LE,RO]{\fontfamily{phv}\selectfont\thepage}
+    \renewcommand{\chaptermark}[1]{\markboth{##1}{}}
+    \renewcommand{\headrulewidth}{0pt}% disable the underline of the header part
+}
+
+% Redefine the plain page style
+\fancypagestyle{backmatter}{%
+    \fancyhf{}%
+    \fancyfoot{} % clear all footer fields
+    \fancyfoot[LE,RO]{\fontfamily{phv}\selectfont\thepage}
+    \renewcommand{\headrulewidth}{0pt}% Line at the header invisible
+    \renewcommand{\footrulewidth}{0pt}% Line at the footer visible
+}
+
+\fancypagestyle{plain}{%
+  \fancyhf{}%
+  \fancyfoot[C]{\fontfamily{phv}\selectfont\thepage}%
+  \renewcommand{\headrulewidth}{0pt}% Line at the header invisible
+  \renewcommand{\footrulewidth}{0pt}% Line at the footer visible
+}
+
+% define the font and color of chapter/setion title
+\usepackage{lmodern}
+\usepackage{titlesec}
+\titleformat{\chapter}[display]
+  {\fontfamily{phv}\selectfont\fontsize{96}{1}\selectfont\RaggedLeft}
+  {\thechapter}{40pt}{\LARGE\bfseries}
+\titleformat{\section}
+  {\normalfont\fontfamily{phv}\selectfont\Large\bfseries}
+  {\thesection}{1em}{}
+\titleformat{\subsection}
+  {\normalfont\fontfamily{phv}\selectfont\large\bfseries}
+  {\thesection}{1em}{}
+\titleformat{\subsubsection}
+  {\normalfont\fontfamily{phv}\selectfont\normalsize\itshape}
+  {\thesection}{1em}{}
+\titleformat{\paragraph}
+  {\normalfont\fontfamily{phv}\selectfont\normalsize\itshape}
+  {\thesection}{1em}{}
+  
+% define caption font
+\usepackage{caption}
+\DeclareCaptionFont{captionfont}{\fontfamily{phv}\selectfont\small}
+\captionsetup{font=captionfont,labelfont=bf}
+
+% table of content
+\usepackage{tocloft}
+% \renewcommand\cftchapafterpnum{\vskip6pt}
+% \renewcommand\cftsecafterpnum{\vskip6pt}
+% \renewcommand\cftsubsecafterpnum{\vskip6pt}
+\renewcommand{\cfttoctitlefont}{\fontfamily{phv}\selectfont\LARGE\bfseries}
+\renewcommand{\cftchapfont}{\fontfamily{phv}\selectfont\normalsize}
+\renewcommand{\cftsecfont}{\fontfamily{phv}\selectfont\normalsize}
+\renewcommand{\cftsubsecfont}{\fontfamily{phv}\selectfont\normalsize}
+\renewcommand{\cftchappagefont}{\fontfamily{phv}\selectfont\normalsize}
+\renewcommand{\cftsecpagefont}{\fontfamily{phv}\selectfont\normalsize}
+\renewcommand{\cftsubsecpagefont}{\fontfamily{phv}\selectfont\normalsize}
+
+% define statistics 
+\newcommand{\pval}{\textit{p}\ }
+\newcommand{\tval}{\textit{t}\ }
+\newcommand{\rval}{\textit{r}\ }
+\newcommand{\tvaldf}{\textit{t}}
+\newcommand{\rvaldf}{\textit{r}}
+
+% package of Chinese
+\usepackage{CJKutf8}
+
+% long caption
+\makeatletter
+\newenvironment{figurelongcaption}
+{\def\@captype{figure}}
+{}
+\makeatletter
+
+% If you are sending a PhD thesis to a professional printer, the
+% statements below may be handy - uncomment them in this case
+
+% \oddsidemargin=-3.4mm    % Margin to use for binding of the text 2.2 cm
+% \evensidemargin=-5.4 mm  % Margin for cutting of for professional printing = 2.0 cm
+% \textwidth=158mm         % Width of the text = 12.8 * 19.5 cm
+
+% The \raggedbottom declaration makes all pages the height of the text
+% on that page. No extra vertical space is added.
+\raggedbottom
+
+% Specify the title and subtitle...
+\def\maintitle{Multiscale connectomics and disconnectivity in schizophrenia}
+%\def\subtitle{No beer, no coffee, just hard work!!!}
+% Specify the authors and date
+\def\authors{Yongbin Wei}
+\def\locationdate{Amsterdam, 22-11-2019}
+
+% ----------------------------------------------------------------------
+
+\begin{document}
+
+\fontfamily{phv}\selectfont	
+
+\frontmatter
+% No page number on title pages
+\pagestyle{empty}
+
+%-- french title page (r) ------------------------------------------------
+\begin{center}
+  \vspace*{3cm}
+  {\LARGE\bfseries\maintitle\par}
+%  {\Large\bfseries\subtitle\par}
+  \vspace{6em}%
+  {\Large\authors\par}
+  \vspace{3mm}%
+  \begin{CJK*}{UTF8}{gbsn}
+  \textbf{魏\ 永斌}
+  \clearpage\end{CJK*} 
+% uncomment below if you want a date on the front page
+% {\locationdate\par}
+\end{center}
+
+\newpage
+\vspace*{\fill}
+\begin{flushleft}
+\vspace{0.1cm}
+\textbf{Copyright} © Yongbin Wei, Amsterdam 2019. \\
+\vspace{0.1cm}
+All rights reserved.   No part of this publication may be reproduced, stored in a retrieval system or transmitted in any form or by any means, electronic,mechanical,  photocopying,  recording  or  otherwise,  without  prior  written permission of the author.\\
+\vspace{0.1cm}
+\textbf{Cover page}: XXX XXX \\ %... image caption for cover page image here ...
+\vspace{0.1cm}
+\textbf{ISBN}: XXX XXX \\% details here, if needed here
+\vspace{0.1cm}
+\textbf{Printed by}: XXX XXX \\%... name of printer here if you like ...
+\end{flushleft}
+
+\newpage
+
+\begin{center}
+\vspace*{1cm}
+VRIJE UNIVERSITEIT\\
+\vspace{1cm}
+  {\LARGE\bfseries\maintitle\par}
+  \vspace{1cm}
+ACADEMISCH PROEFSCHRIFT\\
+\vspace{2cm}
+ter verkrijging van de graad Doctor aan\\
+de Vrije Universiteit Amsterdam,\\
+op gezag van de rector magnificus\\
+prof.dr. XXX XXX,\\
+in het openbaar te verdedigen\\
+ten overstaan van de promotiecommissie\\
+van de Faculteit der Aard- en Levenswetenschappen\\
+op XX-XX-2020 om xx:00\\
+in XXX(de aula/het auditorium)XXX van de universiteit,\\
+De Boelelaan 1105\\
+\vspace{1.4cm}
+door\\
+\vspace{1.4cm}
+\textbf{Yongbin Wei}\\
+\vspace{0.4cm}
+geboren te Zunyi, China P.R.\\  
+\end{center}
+\newpage
+
+\begin{tabular}{ll}
+promotor: & Prof. Dr. Martijn P. van den Heuvel\\
+copromotor: & Prof. Dr. Danielle Posthuma
+\end{tabular}
+\newpage
+
+\pagestyle{empty}
+\begin{center}
+    \normalsize
+    \vspace*{7cm}
+    \textit{To Ting}
+\end{center}
+\newpage
+
+
+% Use roman capitals to number table of contents
+\pagestyle{plain}
+\pagenumbering{Roman}
+
+% Include table of contents
+\tableofcontents
+\newpage
+
+\mainmatter
+% Use arabic pagenumbering for text 
+\pagenumbering{arabic}
+
+% Use page headers for chapters
+% \pagestyle{headings}
+
+\justifying
+% Include the different chapters
+\input{chapters/introduction}
+% \input{chapters/bigbrain.tex}
+\input{chapters/har_dmn.tex}
+%%%% \input{chapters/gamba.tex}
+% \input{chapters/rc_scz.tex}
+% \input{chapters/mtr.tex}
+% \input{chapters/summary}
+\newpage
+\newpage
+
+\backmatter
+% \appendix
+\pagestyle{backmatter}
+\input{chapters/publications.tex}
+\input{chapters/acknowledgements.tex}
+\input{chapters/cv.tex}
+% % Print the index
+% \printindex
+
+\end{document}
