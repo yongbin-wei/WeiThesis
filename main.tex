@@ -1,9 +1,9 @@
-\documentclass[10pt,twoside,b5paper,final]{book}
+\documentclass[10pt,twoside,final]{book}
 
 \usepackage[utf8]{inputenc}
 
-\usepackage[b5paper]{geometry}
-\geometry{top=1in,bottom=0.875in,outer=0.75in,inner=1in}
+\usepackage[paperwidth=180mm, paperheight=250mm]{geometry}
+\geometry{top=25mm,bottom=25mm,outer=25mm,inner=25mm}
 
 \usepackage{afterpage} % The \afterpage command causes LaTeX to
                        % expand its argument after the current page
@@ -99,7 +99,7 @@
 \newlength\thumbheight
 \setlength\thumbheight{24pt}
 \newlength\thumbedge
-\setlength\thumbedge{2pt}
+\setlength\thumbedge{4pt}
 \newlength\thumbhspace
 \setlength\thumbhspace{36pt}
 \newlength\thumbvspace
@@ -148,7 +148,7 @@
 %% rthumb draws a thumb index on the right (odd) page.
 \newcommand*\rthumb{%
     \begin{tikzpicture}[remember picture,overlay]
-        \coordinate (top margin) at (0pt,1in+\topmargin+\headheight+\headsep);
+        \coordinate (top margin) at (0pt,1.5in+\topmargin+\headheight+\headsep);
         \coordinate (right margin) at (1.1in+\evensidemargin,0pt);
         %% Calculate the corners of the thumb index based on the current
         %% chapter number.
@@ -194,7 +194,7 @@
 
 \fancypagestyle{plain}{%
   \fancyhf{}%
-  \fancyfoot[C]{\fontfamily{phv}\selectfont\thepage}%
+  \fancyfoot[LE,RO]{\fontfamily{phv}\selectfont\thepage}%
   \renewcommand{\headrulewidth}{0pt}% Line at the header invisible
   \renewcommand{\footrulewidth}{0pt}% Line at the footer visible
 }
@@ -243,6 +243,12 @@
 \newcommand{\tvaldf}{\textit{t}}
 \newcommand{\rvaldf}{\textit{r}}
 
+% wrap figure
+\usepackage{wrapfig}
+
+% url font type
+\urlstyle{same}
+
 % package of Chinese
 \usepackage{CJKutf8}
 
@@ -265,7 +271,7 @@
 \raggedbottom
 
 % Specify the title and subtitle...
-\def\maintitle{Multiscale connectomics and disconnectivity in schizophrenia}
+\def\maintitle{Multiscale neuroscience of the healthy and diseased brain}
 %\def\subtitle{No beer, no coffee, just hard work!!!}
 % Specify the authors and date
 \def\authors{Yongbin Wei}
@@ -284,9 +290,9 @@
 %-- french title page (r) ------------------------------------------------
 \begin{center}
   \vspace*{3cm}
-  {\LARGE\bfseries\maintitle\par}
+  {\huge\bfseries\maintitle\par}
 %  {\Large\bfseries\subtitle\par}
-  \vspace{6em}%
+  \vspace{25em}%
   {\Large\authors\par}
   \vspace{3mm}%
   \begin{CJK*}{UTF8}{gbsn}
@@ -297,56 +303,84 @@
 \end{center}
 
 \newpage
+% \begin{tabular}{ll}
+% Doctorate committee: & prof.dr. E.J.W. van Someren\\
+% & prof.dr. N.E.M. van Haren\\
+% & prof.dr. W.M. van de Flier\\
+% & prof.dr. J.P.H. Burbach\\
+% & dr. S. van der Sluis \\
+% & \\
+% Paranymphs: & Rory Pijnenburg\\
+% & Ting Qi
+% \end{tabular}
+
 \vspace*{\fill}
-\begin{flushleft}
+% \begin{flushleft}
+\noindent
+The studies described in this thesis were performed at the Department of Complex Trait Genetics, Center for Neurogenomics and Cognitive Research, VU Amsterdam, the Netherlands, and the Department of Psychiatry, University Medical Center Utrecht, Utrecht University, the Netherlands.
+
+\vspace{0.5cm}
+\noindent
+\textbf{Copyright} © Yongbin Wei, 2020. 
+
 \vspace{0.1cm}
-\textbf{Copyright} © Yongbin Wei, Amsterdam 2019. \\
-\vspace{0.1cm}
-All rights reserved.   No part of this publication may be reproduced, stored in a retrieval system or transmitted in any form or by any means, electronic,mechanical,  photocopying,  recording  or  otherwise,  without  prior  written permission of the author.\\
-\vspace{0.1cm}
-\textbf{Cover page}: XXX XXX \\ %... image caption for cover page image here ...
-\vspace{0.1cm}
-\textbf{ISBN}: XXX XXX \\% details here, if needed here
-\vspace{0.1cm}
-\textbf{Printed by}: XXX XXX \\%... name of printer here if you like ...
-\end{flushleft}
+\noindent
+All rights reserved. No part of this publication may be reproduced, stored in a retrieval system or transmitted in any form or by any means, electronic, mechanical, photocopying, recording or otherwise, without  prior written permission of the author.
+
+\vspace{0.5cm}
+\noindent
+ISBN: 978-94-6416-098-7 
+
+% \vspace{0.1cm}
+\noindent
+Cover Design: Ting Qi 
+
+% \vspace{0.1cm}
+\noindent
+Printed by: Ridderprint | www.ridderprint.nl
+
+% \end{flushleft}
 
 \newpage
 
+% Title page
 \begin{center}
+\fontfamily{ptm}\selectfont	
 \vspace*{1cm}
 VRIJE UNIVERSITEIT\\
-\vspace{1cm}
-  {\LARGE\bfseries\maintitle\par}
-  \vspace{1cm}
-ACADEMISCH PROEFSCHRIFT\\
 \vspace{2cm}
-ter verkrijging van de graad Doctor aan\\
+{\Large\bfseries\maintitle\par}
+\vspace{2cm}
+ACADEMISCH PROEFSCHRIFT\\
+\vspace{0.5cm}
+ter verkrijging van de graad Doctor of Philosophy aan\\
 de Vrije Universiteit Amsterdam,\\
 op gezag van de rector magnificus\\
-prof.dr. XXX XXX,\\
+prof.dr. V. Subramaniam,\\
 in het openbaar te verdedigen\\
 ten overstaan van de promotiecommissie\\
-van de Faculteit der Aard- en Levenswetenschappen\\
-op XX-XX-2020 om xx:00\\
-in XXX(de aula/het auditorium)XXX van de universiteit,\\
+van de Faculteit der Bètawetenschappen\\
+op woensdag 4 november 2020 om 11.45 uur\\
+in de aula van de universiteit,\\
 De Boelelaan 1105\\
-\vspace{1.4cm}
+\vspace{3cm}
 door\\
-\vspace{1.4cm}
-\textbf{Yongbin Wei}\\
 \vspace{0.4cm}
-geboren te Zunyi, China P.R.\\  
+Yongbin Wei\\
+\vspace{0.4cm}
+geboren te Guizhou, China\\  
 \end{center}
 \newpage
 
+\fontfamily{ptm}\selectfont	
 \begin{tabular}{ll}
-promotor: & Prof. Dr. Martijn P. van den Heuvel\\
-copromotor: & Prof. Dr. Danielle Posthuma
+promotoren: & prof.dr. M.P. van den Heuvel\\
+ & prof.dr. D. Posthuma
 \end{tabular}
 \newpage
 
 \pagestyle{empty}
+\fontfamily{phv}\selectfont	
 \begin{center}
     \normalsize
     \vspace*{7cm}
@@ -354,7 +388,6 @@ copromotor: & Prof. Dr. Danielle Posthuma
 \end{center}
 \newpage
 \newpage\null\newpage
-
 
 
 % Use roman capitals to number table of contents
@@ -372,12 +405,12 @@ copromotor: & Prof. Dr. Danielle Posthuma
 % Use page headers for chapters
 % \pagestyle{headings}
 
+\pagestyle{MyStyle}
 \justifying
-% Include the different chapters
 \input{chapters/introduction}
 \input{chapters/bigbrain.tex}
 \input{chapters/har_dmn.tex}
-% \input{chapters/gamba.tex}
+\input{chapters/gamba.tex}
 \input{chapters/rc_scz.tex}
 \input{chapters/mtr.tex}
 \input{chapters/summary}
